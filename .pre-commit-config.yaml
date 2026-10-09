@@ -1,0 +1,8 @@
+# Optional: run the same lint and format checks as CI before every commit.
+#   pip install pre-commit && pre-commit install
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.10
+    hooks:
+      - id: ruff-check
+      - id: ruff-format
