@@ -1,0 +1,16 @@
+name: Feature request
+description: A new metric, statistic, input format or option
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What do you need and why
+      description: Describe the evaluation task, not only the proposed solution.
+    validations:
+      required: true
+  - type: textarea
+    id: reference
+    attributes:
+      label: Reference
+      description: For a metric or a test, a paper or another tool that defines it.
