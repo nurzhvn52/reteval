@@ -78,7 +78,8 @@ jobs:
         run: |
           python -m venv /tmp/smoke
           /tmp/smoke/bin/pip install dist/*.whl
-          /tmp/smoke/bin/python -c "import reteval; print(reteval.__version__)"
+          /tmp/smoke/bin/reteval --version
+          /tmp/smoke/bin/reteval metrics
       - uses: actions/upload-artifact@v7
         with:
           name: dist
