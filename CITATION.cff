@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using these metadata."
+title: "reteval: reproducible evaluation of ranked retrieval runs"
+type: software
+authors:
+  - family-names: Serikbekov
+    given-names: Nurzhan
+    affiliation: Astana IT University
+version: 0.1.0
+date-released: 2026-10-09
+license: MIT
+repository-code: "https://github.com/nurzhvn52/reteval"
+abstract: >-
+  Command-line tool and Python library that evaluates ranked retrieval runs in
+  TREC format, aggregates repeated runs of a system over random seeds and
+  compares systems with a baseline using a paired randomization test and
+  bootstrap confidence intervals.
+keywords:
+  - information retrieval
+  - evaluation
+  - retrieval-augmented generation
+  - reproducibility
+  - significance testing
