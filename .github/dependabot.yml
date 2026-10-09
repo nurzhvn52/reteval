@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+  # Updates of the pinned environment are checked by the reproducibility job:
+  # if a new library version changes the example results, the pull request fails.
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: monthly
