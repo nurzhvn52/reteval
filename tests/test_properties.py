@@ -12,6 +12,7 @@ from reteval.metrics import (
     recall,
     reciprocal_rank,
 )
+from reteval.stats import paired_randomization_test
 
 METRICS = [precision, recall, reciprocal_rank, average_precision, ndcg, hit_rate]
 DOCS = [f"d{i}" for i in range(30)]
@@ -47,3 +48,14 @@ def test_precision_and_recall_count_the_same_hits(ranking, judged, k):
 @given(rankings, judgements, st.integers(1, 39))
 def test_recall_does_not_decrease_with_depth(ranking, judged, k):
     assert recall(ranking, judged, k) <= recall(ranking, judged, k + 1)
+
+
+samples = st.lists(st.floats(0, 1), min_size=1, max_size=40)
+
+
+@given(samples, st.integers(0, 2**32 - 1))
+def test_randomization_test_is_symmetric_and_bounded(values, seed):
+    other = [1 - v for v in values]
+    p = paired_randomization_test(values, other, n_resamples=200, seed=seed)
+    assert 0 < p <= 1
+    assert p == paired_randomization_test(other, values, n_resamples=200, seed=seed)
