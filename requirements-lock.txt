@@ -5,7 +5,7 @@
 ast_serialize==0.12.1
 colorama==0.4.6
 contourpy==1.4.0
-coverage==7.16.2
+coverage==7.17.0
 cycler==0.12.1
 fonttools==4.66.1
 hypothesis==6.168.5
