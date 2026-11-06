@@ -1,0 +1,22 @@
+services:
+  jenkins:
+    build:
+      context: .
+      args:
+        KUBECTL_VERSION: ${KUBECTL_VERSION:-v1.37.0}
+    image: reteval-jenkins
+    container_name: reteval-jenkins
+    user: root
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      JENKINS_ADMIN_ID: admin
+      JENKINS_ADMIN_PASSWORD: ${JENKINS_ADMIN_PASSWORD:-admin}
+      KUBECONFIG: /var/jenkins_home/.kube/config
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  jenkins_home:
