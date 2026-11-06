@@ -141,6 +141,10 @@ src/reteval/
 tests/             unit, property-based and end-to-end tests
 examples/          synthetic data, its generator and the expected report
 .github/           CI and release workflows, Dependabot, issue and PR templates
+Dockerfile         test and runtime images
+Jenkinsfile        Jenkins pipeline
+ci/                example reproducibility check, Jenkins server in Docker (configured as code)
+k8s/               Kubernetes Job that reproduces the example
 ```
 
 ## Development
@@ -165,6 +169,27 @@ see [CONTRIBUTING.md](CONTRIBUTING.md).
 | [Dependabot](.github/dependabot.yml) | monthly | pull requests for new versions of actions and Python packages; the reproducibility job shows whether an update changes results |
 
 `main` is protected: a pull request can be merged only when the CI checks pass.
+
+## Docker and Jenkins
+
+The [`Dockerfile`](Dockerfile) has two targets: `test` (pinned dev tools, sources and tests)
+and `runtime` (the package with pinned runtime dependencies, non-root user, ~280 MB).
+
+```bash
+docker build -t reteval .
+docker run --rm reteval metrics
+docker run --rm reteval evaluate --qrels examples/data/qrels.txt \
+  --run bm25=examples/data/runs/bm25.run --metrics ndcg@10
+
+docker build --target test -t reteval-test . && docker run --rm reteval-test
+```
+
+The [`Jenkinsfile`](Jenkinsfile) runs on every commit to any branch: build the `test` image,
+Ruff and mypy, pytest with coverage (JUnit report in Jenkins), build the `runtime` image,
+recompute the example report inside it and compare with `examples/expected/`, optionally push
+to Docker Hub (`PUSH_IMAGE`), and, when a cluster is reachable, run [`k8s/job.yaml`](k8s/job.yaml)
+as a Kubernetes Job and compare its output with the expected report.
+How to start the Jenkins server: [ci/jenkins/README.md](ci/jenkins/README.md).
 
 ## Technology choices
 
