@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: reteval-example
+  labels:
+    app: reteval
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      labels:
+        app: reteval
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: reteval
+          image: __IMAGE__
+          imagePullPolicy: IfNotPresent
+          args:
+            - evaluate
+            - --qrels
+            - examples/data/qrels.txt
+            - --run
+            - bm25=examples/data/runs/bm25.run
+            - --run
+            - dense=examples/data/runs/dense.seed*.run
+            - --run
+            - hybrid=examples/data/runs/hybrid.seed*.run
+            - --metrics
+            - ndcg@10
+            - recall@10
+            - mrr@10
+            - map
+            - --baseline
+            - bm25
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
